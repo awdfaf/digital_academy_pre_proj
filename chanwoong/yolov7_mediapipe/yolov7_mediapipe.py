@@ -6,10 +6,22 @@ import mediapipe as mp
 import matplotlib.pyplot as plt
 import winsound as sd
 import os
+import shutil
 
-def check_pose():
-    a=1
-    print(a)
+
+### crop 폴더를 초기화하는 함수
+def renewal_folder() :
+    folder_path='crop/'
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
+
 
 def calculateAngle(landmark1, landmark2, landmark3):
     '''
@@ -236,10 +248,8 @@ def classifyPose(landmarks, output_image, display=False):
     
     
 
-
-
 if __name__ == '__main__':
-    check_pose()
+
     # Initializing mediapipe pose class.
     mp_pose = mp.solutions.pose
 
@@ -274,5 +284,5 @@ if __name__ == '__main__':
 
                     # winsound.Beep(frequency, duration)
                     sd.Beep(frequency, duration) 
-            cnt += 1
+            cnt += 10
     
