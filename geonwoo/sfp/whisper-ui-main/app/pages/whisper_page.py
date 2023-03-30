@@ -6,6 +6,13 @@ import json
 from config import get_page_config, get_whisper_settings, save_whisper_settings
 from core import MediaManager
 import os
+import pyaudio
+import wave
+from scipy.io import wavfile
+from scipy.signal import butter, lfilter
+import numpy as np
+import matplotlib.pyplot as plt
+import whisper
 
 st.set_page_config(**get_page_config())
 
@@ -69,7 +76,7 @@ if st.button("Start Recording"):
     
 # ----------------------------------------------------------------
     
-# Whisper
+# 음성 파일 불러오기
 # ----------------------------------------------------------------
     # Update session state whisper params
     st.session_state.whisper_params["task"] = "transcribe"
@@ -81,28 +88,17 @@ if st.button("Start Recording"):
                 source = f.read()
                 # 파일 내용에 대한 처리를 수행합니다.
                 st.write("녹음 완료")
-                print(source)
         except:
             st.write("올바른 경로를 입력해주세요.")
 
-    if source:
-        media_manager.add(
-            source=source,
-            source_type=source_type,
-            **st.session_state.whisper_params,
-        )
-        # Render success message
-        st.success("Media downloading & processing in progress.")
-    # Set list mode to true
-    st.session_state.list_mode = True
-    st.experimental_rerun()
+
     
-    
-# Add view
+# whisper
 # ----------------------------------------------------------------
 
-
-
+    model = whisper.load_model("medium")
+    result = model.transcribe(source)
+    st.write(result["text"])
 
 
 
