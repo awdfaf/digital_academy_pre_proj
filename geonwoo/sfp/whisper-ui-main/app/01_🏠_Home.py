@@ -48,7 +48,7 @@ with st.sidebar.expander("➕ &nbsp; Add Media", expanded=False):
             input_files = st.file_uploader(
                 "Add one or more files", type=["mp4", "avi", "mov", "mkv", "mp3", "wav"], accept_multiple_files=True
             )
-        task_options = ["transcrib e", "translate"]
+        task_options = ["transcribe", "translate"]
         task = st.selectbox(
             "Task", options=task_options, index=task_options.index(st.session_state.whisper_params["task"])
         )
