@@ -4,7 +4,7 @@ import numpy as np
 from time import sleep
 import mediapipe as mp
 import matplotlib.pyplot as plt
-import winsound as sd
+#import winsound as sd
 import os
 
 def check_pose():
@@ -263,16 +263,16 @@ if __name__ == '__main__':
             if landmarks:
                 image, label = classifyPose(landmarks, output_image, display=False)
                 print(label)
-                if label == 'aaaaaaaaaaaaaaaaa':
-                    ### 빈도
-                    # 빈도값 사용 범위 : 37 ~ 32767
-                    frequency = 2000    
+#                 if label == 'aaaaaaaaaaaaaaaaa':
+#                     ### 빈도
+#                     # 빈도값 사용 범위 : 37 ~ 32767
+#                     frequency = 2000    
 
-                    ### 지속시간
-                    # 1000ms ==1초
-                    duration = 250     
+#                     ### 지속시간
+#                     # 1000ms ==1초
+#                     duration = 250     
 
-                    # winsound.Beep(frequency, duration)
-                    sd.Beep(frequency, duration) 
+#                     # winsound.Beep(frequency, duration)
+#                     sd.Beep(frequency, duration) 
             cnt += 1
     
