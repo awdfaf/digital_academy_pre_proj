@@ -17,7 +17,7 @@ from utils.torch_utils import select_device, load_classifier, time_synchronized,
 from tensorflow import keras
 from tensorflow.keras.preprocessing.image import img_to_array, array_to_img, load_img
 import matplotlib.pyplot as plt
-import winsound as sd
+
 
 def detect(save_img=False):
     source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
@@ -207,19 +207,7 @@ def load_data(data_dir):
     
     return test_input
     
-### 비프음 함수
-def beepsound():
-    
-    ### 빈도
-    # 빈도값 사용 범위 : 37 ~ 32767
-    frequency = 2000    
-    
-    ### 지속시간
-    # 1000ms ==1초
-    duration = 1000     
-    
-    # winsound.Beep(frequency, duration)
-    sd.Beep(frequency, duration) 
+
 
 
     
