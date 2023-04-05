@@ -1,5 +1,12 @@
 import json
 import pathlib
+import pyaudio
+import wave
+from scipy.io import wavfile
+from scipy.signal import butter, lfilter
+import numpy as np
+import matplotlib.pyplot as plt
+import whisper
 
 # Project structure
 # -----------------
@@ -76,4 +83,51 @@ def get_page_config(page_title_prefix="", layout="wide"):
             "About": ABOUT,
         },
     }
+    
+
+def whisper_bandpassfilter(record_seconds, output_filename, low_freq, high_freq):
+    
+    # Record audio
+    audio = pyaudio.PyAudio()
+    stream = audio.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, frames_per_buffer=1024)
+
+    print("녹음을 시작합니다...")
+
+    frames = []
+
+    for i in range(0, int(44100 / 1024 * record_seconds)):
+        data = stream.read(1024)
+        frames.append(data)
+
+    print("녹음이 완료되었습니다.")
+
+    stream.stop_stream()
+    stream.close()
+    audio.terminate()
+
+    waveFile = wave.open(output_filename, 'wb')
+    waveFile.setnchannels(1)
+    waveFile.setsampwidth(audio.get_sample_size(pyaudio.paInt16))
+    waveFile.setframerate(44100)
+    waveFile.writeframes(b''.join(frames))
+    waveFile.close()
+
+    # Bandpass filter
+    input_file = output_filename
+    output_file = "./filtered_" + output_filename
+
+    rate, data = wavfile.read(input_file)
+    nyq = 0.5 * rate
+    low = low_freq / nyq
+    high = high_freq / nyq
+    order = 5
+
+    b, a = butter(order, [low, high], btype='band')
+    filtered_data = lfilter(b, a, data)
+    wavfile.write(output_file, rate, np.asarray(filtered_data, dtype=np.int16))
+
+
+
+    
+
 
