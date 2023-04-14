@@ -4,7 +4,7 @@ import numpy as np
 from time import sleep
 import mediapipe as mp
 import matplotlib.pyplot as plt
-import winsound as sd
+#import winsound as sd
 import os
 
 def check_pose():
@@ -126,33 +126,33 @@ def classifyPose(landmarks, output_image, display=False):
     
     # Get the angle between the left shoulder, elbow and wrist points. 
     left_elbow_angle = calculateAngle(landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value],
-                                      landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value],
-                                      landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value])
+                                    landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value],
+                                    landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value])
     
     # Get the angle between the right shoulder, elbow and wrist points. 
     right_elbow_angle = calculateAngle(landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value],
-                                       landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value],
-                                       landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value])   
+                                    landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value],
+                                    landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value])   
     
     # Get the angle between the left elbow, shoulder and hip points. 
     left_shoulder_angle = calculateAngle(landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value],
-                                         landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value],
-                                         landmarks[mp_pose.PoseLandmark.LEFT_HIP.value])
+                                        landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value],
+                                        landmarks[mp_pose.PoseLandmark.LEFT_HIP.value])
 
     # Get the angle between the right hip, shoulder and elbow points. 
     right_shoulder_angle = calculateAngle(landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value],
-                                          landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value],
-                                          landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value])
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value],
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value])
 
     # Get the angle between the left hip, knee and ankle points. 
     left_knee_angle = calculateAngle(landmarks[mp_pose.PoseLandmark.LEFT_HIP.value],
-                                     landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value],
-                                     landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value])
+                                    landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value],
+                                    landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value])
 
     # Get the angle between the right hip, knee and ankle points 
     right_knee_angle = calculateAngle(landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value],
-                                      landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value],
-                                      landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value])
+                                    landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value],
+                                    landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value])
     
     #----------------------------------------------------------------------------------------------------------------
     
@@ -206,7 +206,7 @@ def classifyPose(landmarks, output_image, display=False):
     #----------------------------------------------------------------------------------------------------------------
     
     if left_elbow_angle < 90:
-        label = 'aaaaaaaaaaaaaaaaa'
+        label = 'A 행동'
         
     
         
@@ -263,16 +263,16 @@ if __name__ == '__main__':
             if landmarks:
                 image, label = classifyPose(landmarks, output_image, display=False)
                 print(label)
-                if label == 'aaaaaaaaaaaaaaaaa':
-                    ### 빈도
-                    # 빈도값 사용 범위 : 37 ~ 32767
-                    frequency = 2000    
+#                 if label == 'aaaaaaaaaaaaaaaaa':
+#                     ### 빈도
+#                     # 빈도값 사용 범위 : 37 ~ 32767
+#                     frequency = 2000    
 
-                    ### 지속시간
-                    # 1000ms ==1초
-                    duration = 250     
+#                     ### 지속시간
+#                     # 1000ms ==1초
+#                     duration = 250     
 
-                    # winsound.Beep(frequency, duration)
-                    sd.Beep(frequency, duration) 
+#                     # winsound.Beep(frequency, duration)
+#                     sd.Beep(frequency, duration) 
             cnt += 1
     
