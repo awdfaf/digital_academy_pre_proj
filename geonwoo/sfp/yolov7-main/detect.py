@@ -1,22 +1,19 @@
 import argparse
 import time
 from pathlib import Path
-import pathlib
+
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
-import os
-import numpy as np
+
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
 from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
     scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
 from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
-from tensorflow import keras
-from tensorflow.keras.preprocessing.image import img_to_array, array_to_img, load_img
-import matplotlib.pyplot as plt
+
 
 
 def detect(save_img=False):
@@ -25,12 +22,6 @@ def detect(save_img=False):
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://', 'https://'))
 
-    #make crop folder
-
-    if not os.path.exists("crop"):
-        os.mkdir("crop")
-    crp_cnt = 0
-    
     # Directories
     save_dir = Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))  # increment run
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
@@ -128,17 +119,6 @@ def detect(save_img=False):
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
-                    
-                    
-                    #crop an image based on coordinates
-                    object_coordinates = [int(xyxy[0]),int(xyxy[1]),int(xyxy[2]),int(xyxy[3])]
-                    cropobj = im0[int(xyxy[1]):int(xyxy[3]),int(xyxy[0]):int(xyxy[2])]
-                    
-                    #save crop part
-                    crop_file_path = os.path.join("crop",str(crp_cnt)+".jpg")
-                    cv2.imwrite(crop_file_path,cropobj)
-                    crp_cnt = crp_cnt+1
-                    
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if opt.save_conf else (cls, *xywh)  # label format
@@ -182,40 +162,7 @@ def detect(save_img=False):
         #print(f"Results saved to {save_dir}{s}")
 
     print(f'Done. ({time.time() - t0:.3f}s)')
-    
-    
 
-def load_data(data_dir):
-    train_path = pathlib.Path('./crop/')
-    
-    #이미지 불러들이기 
-    train_input = []
-    for path in train_path :
-        # 이미지 불러들이기 
-        img = load_img(("{}".format(path)))
-        new_img = img.resize((50,50))
-
-        # 이미지에서 픽셀 데이터 추출하기 
-        pix = np.array(new_img)
-        # print("픽셀 차원: ", pix.shape)
-        
-        # 픽셀 데이터 합치기 
-        train_input.append(pix)
-    
-    train_input = np.array(train_input)
-    test_input = train_input / 255.0
-    
-    return test_input
-    
-
-
-
-    
-    
-    
-                
-    
-    
 
 
 if __name__ == '__main__':
@@ -241,15 +188,11 @@ if __name__ == '__main__':
     opt = parser.parse_args()
     print(opt)
     #check_requirements(exclude=('pycocotools', 'thop'))
-    
-    
 
     with torch.no_grad():
         if opt.update:  # update all models (to fix SourceChangeWarning)
             for opt.weights in ['yolov7.pt']:
                 detect()
                 strip_optimizer(opt.weights)
-                
         else:
             detect()
-            
