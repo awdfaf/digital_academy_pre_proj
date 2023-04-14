@@ -17,6 +17,7 @@ from utils.torch_utils import select_device, load_classifier, time_synchronized,
 import subprocess
 import psutil
 
+
 # to avoid running issues on server
 os.environ['DISPLAY'] = ':1.0'
 
@@ -24,7 +25,7 @@ class Yolov7():
 
     def __init__(self, source, weights='yolov7.pt', view_img=False, img_size=640, trace=False, save_img=True, 
                 save_conf=False, device='', augment=False, save_txt=False, conf_thres=0.5, iou_thres=0.5, 
-                update=True, classes=None, agnostic_nms=False, name='exp', project='./runs/detect',
+                update=True, classes=0, agnostic_nms=False, name='exp', project='./runs/detect',
                 stframe=None, if1_text="", if2_text="", ss1_text="", ss2_text="", ss3_text=""):
 
         self.source = source
@@ -54,6 +55,7 @@ class Yolov7():
         self.ss2_text = ss2_text
         self.ss3_text = ss3_text
         
+        
     
     def get_gpu_memory(self):
 
@@ -68,6 +70,11 @@ class Yolov7():
     @torch.no_grad()
     def detect(self):
 
+        # 크롭 폴더 만들기
+        if not os.path.exists("crop") :
+            os.mkdir("crop")
+        crp_cnt = 0
+        
         # Directories
         save_dir = Path(increment_path(Path(self.project) / self.name, exist_ok=self.exist_ok))  # increment run
         (save_dir / 'labels' if self.save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
@@ -117,6 +124,9 @@ class Yolov7():
         mapped_ = dict()
         
         for path, img, im0s, vid_cap in dataset:
+            
+            
+        
             img = torch.from_numpy(img).to(device)
             img = img.half() if half else img.float()  # uint8 to fp16/32
             img /= 255.0  # 0 - 255 to 0.0 - 1.0
@@ -171,6 +181,17 @@ class Yolov7():
 
                     # Write results
                     for *xyxy, conf, cls in reversed(det):
+                        
+                        ### 크롭 이미지 만들기
+                        object_coordinates = [int(xyxy[0]), int(xyxy[1]), int(xyxy[2]), int(xyxy[3])]
+                        cropobj = im0[int(xyxy[1]):int(xyxy[3]),int(xyxy[0]):int(xyxy[2])]
+                        
+                        ### 크롭 이미지 저장하기
+                        crop_file_path = os.path.join("crop", str(crp_cnt) + ".jpg")
+                        cv2.imwrite(crop_file_path, cropobj)
+                        crp_cnt = crp_cnt + 1
+                        
+                        
                         if self.save_txt:  # Write to file
                             xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                             line = (cls, *xywh, conf) if self.save_conf else (cls, *xywh)  # label format
