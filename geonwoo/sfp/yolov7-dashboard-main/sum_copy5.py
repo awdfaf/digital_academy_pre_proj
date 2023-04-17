@@ -31,6 +31,9 @@ import mediapipe as mp
 import matplotlib.pyplot as plt
 import winsound as sd
 
+### 파일 이름 결정에 사용할 라이브러리
+from datetime import datetime
+
 ### 전역변수 지정
 parser = argparse.ArgumentParser()
 parser.add_argument('--weights', nargs='+', type=str, default='yolov7.pt', help='model.pt path(s)')
@@ -52,7 +55,7 @@ parser.add_argument('--name', default='exp', help='save results to project/name'
 parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
 parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
 opt = parser.parse_args()
-print("opt ==> ", opt)
+# print("opt ==> ", opt)
 
 
 ### 미디어파이프 전역변수 설정
@@ -65,20 +68,6 @@ pose = mp_pose.Pose(static_image_mode=True, min_detection_confidence=0.3, model_
 # Initializing mediapipe drawing class, useful for annotation.
 mp_drawing = mp.solutions.drawing_utils 
   
-    
-### crop 폴더를 초기화하는 함수
-def renewal_folder() :
-    folder_path='crop/'
-    for filename in os.listdir(folder_path):
-        file_path = os.path.join(folder_path, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as e:
-            print('Failed to delete %s. Reason: %s' % (file_path, e))
-            
             
 def detect(save_img=False):
     source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
@@ -222,7 +211,7 @@ def detect(save_img=False):
             if save_img:
                 if dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
-                    print(f" The image with the result is saved in: {save_path}")
+                    # print(f" The image with the result is saved in: {save_path}")
                 else:  # 'video' or 'stream'
                     if vid_path != save_path:  # new video
                         vid_path = save_path
@@ -242,7 +231,7 @@ def detect(save_img=False):
         s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
         #print(f"Results saved to {save_dir}{s}")
 
-    print(f'Done. ({time.time() - t0:.3f}s)')
+    # print(f'Done. ({time.time() - t0:.3f}s)')
 
 
 def yolov7():
@@ -256,10 +245,10 @@ def yolov7():
             
 
 def renewal():
-    crop_path = 'C:/project_chanwoong/chanwoong/yolov7-object-cropping/crop'
+    crop_path = 'crop'
     
     while True:
-        sleep(5)
+        sleep(3)
         
         if os.path.exists(crop_path):
             try:
@@ -425,36 +414,28 @@ def classifyPose(landmarks, output_image, display=False):
 ### 미디어파이프 함수
 ### - 멀티프로세싱에 사용된다.
 def mediapipe():
-    
-    directory = "./crop/" # 폴더 경로 입력
-    cnt = 0
-    
+    directory = "crop/" # 폴더 경로 입력
+
     while True:
-        sleep(2)
+        sleep(3)
+        try :
+            print("미디어파이프 폴더 안 탐색 ",os.listdir(directory))
+            image = cv2.imread('./crop/{}'.format(os.listdir(directory)[0]))
+            sleep(1)
+            output_image, landmarks = detectPose(image,mp_pose.Pose(static_image_mode=True,
+                                                        min_detection_confidence=0.5, model_complexity=0),display=False)
+            sleep(2)
         
-        # if "{}.jpg".format(cnt) in os.listdir(directory):
-            # if cnt == 0:
-            #     sleep(1)
-            # # Read a sample image and perform pose classification on it.
-            # image = cv2.imread('crop/{}.jpg'.format(cnt))
-            # # output_image, landmarks = detectPose(image, pose, display=False)
-            # output_image, landmarks = detectPose(image,mp_pose.Pose(static_image_mode=True,
-            #                                            min_detection_confidence=0.5, model_complexity=0),display=False)
-   
-        # if landmarks:
-        #     classifyPose(landmarks, output_image, display=True)
-        #     cv2.imwrite("test/output_{}.jpg.".format(cnt), output_image) 
-        # cnt += 5
+            # cv2.imwrite('result/{}'.format(str(datetime.now())), output_image)
         
-        image = cv2.imread('./crop/{}'.format(os.listdir(directory)[0 + cnt]))
-        output_image, landmarks = detectPose(image,mp_pose.Pose(static_image_mode=True,
-                                                       min_detection_confidence=0.5, model_complexity=0),display=False)
-        
-        print("미디어파이프 접근 성공")    
-        if landmarks:
-            classifyPose(landmarks, output_image, display=True)
-            cv2.imwrite("/test/output_{}.jpg.".format(cnt), output_image) 
-        cnt += 5
+            print("미디어파이프 접근 성공")    
+            sleep(2)
+            if landmarks:
+                print("랜드마크에 접근")
+                classifyPose(landmarks, output_image, display=True)
+        except :
+            sleep(2)
+            continue
         
         # else :
         #     print("미디어 파이프 입력이 없습니다.")
