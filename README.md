@@ -23,3 +23,7 @@ streamlit run {실행파일}.py
 ## References
 1. [Official YOLOv7 repo](https://github.com/WongKinYiu/yolov7)
 2. [Whisper](https://github.com/openai/whisper)
+
+
+## 포스터
+![포스터)](https://www.notion.so/awdfaf/12b03dc748364de3b9c6ad1e21a73194?pvs=4#0256b6ea05c145a48a9ac25564b94db1 "포스터")
