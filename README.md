@@ -15,5 +15,5 @@ pip install -r requirments.txt
 ```
 3. Run:
 ``` shell
-streamlit run app.py
+streamlit run {실행파일}.py
 ```
