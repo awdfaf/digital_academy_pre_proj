@@ -26,4 +26,4 @@ streamlit run {실행파일}.py
 
 
 ## 포스터
-![](https://ibb.co/rH2ZXnj)
+![](https://i.esdrop.com/d/f/wOHvMVoIES/FIQyCcua4r.png)
