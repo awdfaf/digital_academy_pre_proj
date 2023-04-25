@@ -6,7 +6,7 @@
 
 
 
-# 사용법
+## 사용법
 
 1. Clone the repo
 ``` shell
@@ -20,3 +20,6 @@ pip install -r requirments.txt
 ``` shell
 streamlit run {실행파일}.py
 ```
+## References
+1. [Official YOLOv7 repo](https://github.com/WongKinYiu/yolov7)
+2. [Streamlit dashboard](https://github.com/SahilChachra/Video-Analytics-Dashboard)
