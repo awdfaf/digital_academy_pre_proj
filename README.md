@@ -22,4 +22,4 @@ streamlit run {실행파일}.py
 ```
 ## References
 1. [Official YOLOv7 repo](https://github.com/WongKinYiu/yolov7)
-2. [Streamlit dashboard](https://github.com/SahilChachra/Video-Analytics-Dashboard)
+2. [Whisper](https://github.com/openai/whisper)
