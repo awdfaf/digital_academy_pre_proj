@@ -7,6 +7,7 @@
 
 
 # 사용법
+
 1. Clone the repo
 ``` shell
 git clone https://github.com/awdfaf/digital_academy_pre_proj.git
