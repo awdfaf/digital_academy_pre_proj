@@ -18,7 +18,7 @@ pip install -r requirments.txt
 ```
 3. Run:
 ``` shell
-streamlit run {실행파일}.py
+streamlit run {run}.py
 ```
 ## 참고
 1. [Official YOLOv7 repo](https://github.com/WongKinYiu/yolov7)
