@@ -23,6 +23,7 @@ streamlit run {run}.py
 ## 참고
 1. [Official YOLOv7 repo](https://github.com/WongKinYiu/yolov7)
 2. [Whisper](https://github.com/openai/whisper)
+3. [Notion](https://awdfaf.notion.site/awdfaf/fa021383782340b8870e83afff8c0fb4)
 
 
 ## 포스터
